@@ -1,18 +1,23 @@
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import logo from '../assets/dist/images/profile/user-1.jpg';
 import actSet from "../assets/dist/images/svgs/icon-account.svg";
+//import { useNavigate } from "react-router-dom";
+import { logoutTh } from "../Services/authThunk";
 
 export default function Header() {
 
-    
- const userState = useSelector((state) => state.auth.user);
+    const dispatch =useDispatch()
+  //  const navigate = useNavigate()
+ const {user } = useSelector((state) => state.auth);
 
-  // Check if the user state is not null
-  if (userState !== null) {
-  console.log('dt kayana' , userState.name)
-  } else {
-     console.log("dt makaynach");
-  }
+ const logout = (e)=>{
+    e.preventDefault();
+   dispatch(logoutTh());
+
+
+ }
+
+
     return (
         <>
             {/* <!--  Header Start --> */}
@@ -302,16 +307,14 @@ export default function Header() {
                                                 />
                                                 <div className="ms-3">
                                                     <h5 className="mb-1 fs-3">
-                                                        {userState &&
-                                                            userState.name}
+                                                        {user && user.name}
                                                     </h5>
                                                     <span className="mb-1 d-block text-dark">
                                                         Designer
                                                     </span>
                                                     <p className="mb-0 d-flex text-dark align-items-center gap-2">
                                                         <i className="ti ti-mail fs-4"></i>{" "}
-                                                        {userState &&
-                                                            userState.email}
+                                                        {user && user.email}
                                                     </p>
                                                 </div>
                                             </div>
@@ -340,12 +343,12 @@ export default function Header() {
                                                 </a>
                                             </div>
                                             <div className="d-grid py-4 px-7 pt-8">
-                                                <a
-                                                    href="./authentication-login.html"
+                                                <button
+                                                    onClick={(e) => logout(e)}
                                                     className="btn btn-outline-primary"
                                                 >
                                                     Log Out
-                                                </a>
+                                                </button>
                                             </div>
                                         </div>
                                     </div>

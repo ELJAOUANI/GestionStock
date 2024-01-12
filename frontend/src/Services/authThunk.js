@@ -1,4 +1,5 @@
 import { authAction } from "../Store/Slices/authSlice";
+import axiosClient from "../api/axios";
 import { login } from "./authService";
 
 const loginTh = (data) => {
@@ -21,5 +22,21 @@ const loginTh = (data) => {
         }
     };
 };
+export const logoutTh =()=>{
+    return async (dispatch, _)=>{
+     try{
+    const res = await axiosClient.post('/logout')
+        if(res.status === 200){
+            dispatch(authAction.logout())
+               localStorage.removeItem("token");
+               localStorage.removeItem("user");
+        }
+     
+        return res 
+    }catch(e){
+        console.error(e) ;
 
+    }
+}
+}
 export default loginTh;

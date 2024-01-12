@@ -36,6 +36,7 @@ export default function newFournisseur() {
                             </div>
                             <div className="modal-body">
                                 <from className="form-horizontal form-material">
+                                    
                                     <div className="form-group">
                                         <div className="col-md-12 mb-3">
                                             <input
@@ -59,6 +60,42 @@ export default function newFournisseur() {
                                                     tabIndex="0"
                                                     id="nameEx"
                                                     autoFocus
+                                                    required
+                                                />
+                                            </div>
+                                        </div>
+                                        <div className="col-sm-6">
+                                            <div className="mb-3">
+                                                <label className="form-label">
+                                                    Ville{" "}
+                                                    <span className="text-danger font-18">
+                                                        *
+                                                    </span>
+                                                </label>
+                                                <input
+                                                    className="form-control"
+                                                    placeholder="Entrez la ville de fournisseur"
+                                                    type="text"
+                                                    tabIndex="0"
+                                                    id="nameEx"
+                                                    required
+                                                />
+                                            </div>
+                                        </div>
+                                        <div className="col-sm-12">
+                                            <div className="mb-3">
+                                                <label className="form-label">
+                                                    Adresse{" "}
+                                                    <span className="text-danger font-18">
+                                                        *
+                                                    </span>
+                                                </label>
+                                                <input
+                                                    className="form-control"
+                                                    placeholder="Entrez l'adresse de fournisseur"
+                                                    type="text"
+                                                    tabIndex="0"
+                                                    id="nameEx"
                                                     required
                                                 />
                                             </div>
@@ -125,6 +162,7 @@ export default function newFournisseur() {
                                             </div>
                                         </div>
                                     </div>
+                               
                                 </from>
                             </div>
                             <div className="modal-footer">

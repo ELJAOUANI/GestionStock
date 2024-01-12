@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import NewEmployee from "../employer/NewEmployee";
+import NewFournisseur from "./newFournisseur";
 import { getdataThunk } from "../../../Services/fournisseur/fournisseurThunk";
 import { useDispatch, useSelector } from "react-redux";
 import FournisseurCards from "./fournisseurCards";
@@ -25,7 +25,7 @@ export default function Fournisseur() {
                 <div className="border-bottom title-part-padding">
                     <h4 className="card-title mb-0">Liste Des Fournisseurs</h4>
                 </div>
-                <NewEmployee />
+                <NewFournisseur />
                 <div className="card-body">
                     <div className="table-responsive">
                         <table

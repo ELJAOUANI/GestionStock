@@ -4,8 +4,20 @@ const axiosClient = axios.create({
     withCredentials: true,
 });
 axiosClient.interceptors.request.use((config) => {
-    const token = localStorage.getItem("token");
-    config.headers.Authorization = `Bearer ${token}`;
-    return config;
+  config.headers.Authorization = `Bearer ${localStorage.getItem('token')}`
+  return config
 });
+
+axiosClient.interceptors.response.use(response => {
+  return response;
+}, error => {
+  if (error.response && error.response.status === 401) {
+    localStorage.removeItem('token')
+    window.location.reload();
+    // router.navigate('/login')
+    return error;
+  }
+  throw error;
+})
+
 export default axiosClient

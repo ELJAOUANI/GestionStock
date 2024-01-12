@@ -24,8 +24,11 @@ Route::prefix('auth')->group(function(){
     Route::post('/register', [AuthController::class, 'register']);
     Route::post('/forget-password', [AuthController::class, 'forgetPassword']);
     Route::post('/check-authentication', [AuthController::class,'checkAuthentication']);
-    Route::POST('/logout', [AuthController::class ,'logout'])->middleware('auth:api');
+  
 
+});
+Route::middleware(['auth:sanctum'])->group(function () {
+    Route::post('/logout', [AuthController::class, 'logout']);
 });
 Route::prefix('fournisseur')->group(function () {
     Route::post('/update/{id}', [FournisseurController::class, 'update']);

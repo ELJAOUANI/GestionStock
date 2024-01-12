@@ -38,7 +38,7 @@ export default function Login() {
             const response = await dispatch(loginTh(payload));
             console.log("heey", response);
             if (response.status === 200) {
-                navigate("/dashboard");
+                navigate("/");
             } else if (response.status === 401) {
                 setMessage(response.data.message);
             }
@@ -96,12 +96,12 @@ export default function Login() {
                                         </div>
 
                                         <form>
+                                            {message && (
+                                                <div className="btn btn-primary">
+                                                    <p>{message}</p>
+                                                </div>
+                                            )}
                                             <div className="mb-3">
-                                                {message && (
-                                                    <div className="alert">
-                                                        <p>{message}</p>
-                                                    </div>
-                                                )}
                                                 <label
                                                     htmlFor="exampleInputEmail1"
                                                     className="form-label"
