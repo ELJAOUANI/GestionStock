@@ -42,7 +42,6 @@ export default function SideBaree() {
                                   to="/"
                                   exact
                                   className="sidebar-link"
-                               
                                   aria-expanded="false"
                               >
                                   <span>
@@ -55,7 +54,6 @@ export default function SideBaree() {
                               <NavLink
                                   to="/supplier"
                                   className="sidebar-link"
-                                  
                                   aria-expanded="false"
                               >
                                   <span>
@@ -80,13 +78,34 @@ export default function SideBaree() {
                               <NavLink
                                   to="/employees"
                                   className="sidebar-link"
-                                
                                   aria-expanded="false"
                               >
                                   <span>
                                       <i className="ti ti-user-circle"></i>
                                   </span>
                                   <span className="hide-menu">Employés</span>
+                              </NavLink>
+                          </li>
+                          <li className="sidebar-item">
+                              <NavLink
+                                  to="/category"
+                                  className="sidebar-link"
+                                  aria-expanded="false"
+                              >
+                                  <span>
+                                      <i className="ti ti-clipboard"></i>
+                                  </span>
+                                  <span className="hide-menu">Categories</span>
+                              </NavLink>
+                              <NavLink
+                                  to="/products"
+                                  className="sidebar-link"
+                                  aria-expanded="false"
+                              >
+                                  <span>
+                                      <i className="ti ti-briefcase"></i>
+                                  </span>
+                                  <span className="hide-menu">Produits</span>
                               </NavLink>
                           </li>
                       </ul>
