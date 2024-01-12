@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CategoryContoller;
 use App\Http\Controllers\FournisseurController;
 
 /*
@@ -38,7 +39,13 @@ Route::prefix('fournisseur')->group(function () {
     Route::get('/export', [FournisseurController::class, 'export']);
     Route::post('/upload', [FournisseurController::class, 'upload']);
 });
-
+route::prefix('category')->group(function()
+{
+    route::put('/update/{id}',[CategoryContoller::class,'update']);
+    route::get('/get',[CategoryContoller::class,'get']);
+Route::post('/store', [CategoryContoller::class, 'store']);
+Route::delete('/delete/{id}', [CategoryContoller::class, 'delete']);
+});
 
 // Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 //     return $request->user();
