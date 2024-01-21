@@ -16,10 +16,7 @@ export default function FournisseurCards() {
                                     ></i>
                                 </div>
                                 <h6 className="mb-0 ms-3">Fournisseur Achat</h6>
-                                <div className="ms-auto text-primary d-flex align-items-center">
-                                    <i className="ti ti-trending-up text-primary fs-6 me-1"></i>
-                                    <span className="fs-2 fw-bold"></span>
-                                </div>
+                            
                             </div>
                             <div className="d-flex align-items-center justify-content-between mt-4">
                                 <h3 className="mb-0 fw-semibold fs-7">
@@ -40,17 +37,12 @@ export default function FournisseurCards() {
                                         title="ETH"
                                     ></i>
                                 </div>
-                                <h6 className="mb-0 ms-3">ETH</h6>
-                                <div className="ms-auto text-danger d-flex align-items-center">
-                                    <i className="ti ti-trending-up text-danger fs-6 me-1"></i>
-                                    <span className="fs-2 fw-bold">
-                                        + 3.20%
-                                    </span>
-                                </div>
+                                <h6 className="mb-0 ms-3">fournisseur transport</h6>
+                               
                             </div>
                             <div className="d-flex align-items-center justify-content-between mt-4">
                                 <h3 className="mb-0 fw-semibold fs-7">
-                                    0.5620
+                                    {kpis?.fournisseur_transport}
                                 </h3>
                                 <span className="fw-bold">$2,110.00</span>
                             </div>

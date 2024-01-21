@@ -7,7 +7,7 @@ import FournisseurCards from "./fournisseurCards";
 
 export default function Fournisseur() {
     const dispatch = useDispatch();
-    const [loading , setLoading] = useState('')
+
    
     useEffect(() => {
 

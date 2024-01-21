@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import logo from "../../assets/dist/images/logos/castcastlefood2.svg";
 import { useDispatch } from "react-redux";
 
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 //import { authAction, login } from '../../Store/Slices/authSlice';
 import loginTh from "../../Services/authThunk";
@@ -137,12 +137,12 @@ export default function Login() {
                                             </div>
 
                                             <div className="d-flex align-items-center justify-content-between mb-4">
-                                                <a
+                                                <Link
                                                     className="text-primary fw-medium"
-                                                    href="./authentication-forgot-password.html"
+                                                    to={"/reset-password"}
                                                 >
                                                     Forgot Password ?
-                                                </a>
+                                                </Link>
                                             </div>
 
                                             <div>
@@ -163,16 +163,13 @@ export default function Login() {
                                                 </button>
                                             </div>
 
-                                            <div className="d-flex align-items-center justify-content-center">
+                                            <div className="text-center d-flex align-items-center justify-content-center">
                                                 <p className="fs-4 mb-0 fw-medium">
-                                                    New to Modernize?
+                                                    Secure access for authorized
+                                                    personnel only. Please log
+                                                    in to manage and administer
+                                                    the system.
                                                 </p>
-                                                <a
-                                                    className="text-primary fw-medium ms-2"
-                                                    href="./authentication-register.html"
-                                                >
-                                                    Create an account
-                                                </a>
                                             </div>
                                         </form>
                                     </div>

@@ -1,29 +1,28 @@
 import { useDispatch, useSelector } from "react-redux";
-import logo from '../assets/dist/images/profile/user-1.jpg';
+import logo from "../assets/dist/images/profile/user-1.jpg";
 import actSet from "../assets/dist/images/svgs/icon-account.svg";
 //import { useNavigate } from "react-router-dom";
 import { logoutTh } from "../Services/authThunk";
 
 export default function Header() {
+    const dispatch = useDispatch();
+    //  const navigate = useNavigate()
+    const { user } = useSelector((state) => state.auth);
 
-    const dispatch =useDispatch()
-  //  const navigate = useNavigate()
- const {user } = useSelector((state) => state.auth);
-
- const logout = (e)=>{
-    e.preventDefault();
-   dispatch(logoutTh());
-
-
- }
-
+    const logout = (e) => {
+        e.preventDefault();
+        dispatch(logoutTh());
+    };
 
     return (
         <>
             {/* <!--  Header Start --> */}
-            <header className="app-header">
-                <nav className="navbar navbar-expand-lg navbar-light ">
-                    <ul className="navbar-nav">
+            <header className="app-header" style={{ marginTop: 0 }}>
+                <nav
+                    style={{ marginTop: 0 }}
+                    className="navbar navbar-expand-lg navbar-light  "
+                >
+                    <ul className="navbar-nav" style={{ marginTop: 0 }}>
                         <li className="nav-item">
                             <a
                                 className="nav-link sidebartoggler nav-icon-hover ms-n3"

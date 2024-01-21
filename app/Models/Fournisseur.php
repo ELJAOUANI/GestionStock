@@ -27,6 +27,11 @@ class Fournisseur extends Model
         'is_active',
         'type',
     ];
+       public function subProducts()
+    {
+        return $this->hasMany(SubProduct::class);
+    }
+    
 
 }
 

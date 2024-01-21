@@ -8,7 +8,8 @@ class CategoryServices
     public static function get()
     {
         try {
-            $category = Category::all();
+
+         $category = Category::with('parent')->get();
             return response()->json(['category' => $category], 200);
         } catch (\Throwable $th) {
             return response()->json(['error', $th->getMessage()], 500);
@@ -19,11 +20,20 @@ class CategoryServices
     {
 
         try {
-            $category = new Category($request->all());
-            $category->save();
+            $request->validate([
+                'name' => 'required|string',
+                'description' => 'required|string',
+                'parent_id' => 'nullable|exists:category,id',
+            ]);
+
+            $category = Category::create([
+                'name' => $request->name,
+                'description' => $request->description,
+                'parent_id' => $request->parent_id,
+            ]);
             return response()->json([
                 "category" => $category
-            ]);
+            ], 201);
         } catch (\Throwable $th) {
             return response()->json([
                 'error' => $th->getMessage()
@@ -34,8 +44,20 @@ class CategoryServices
     public static function update($id, $request)
     {
         try {
+            $request->validate([
+                'name' => 'required|string',
+                'description' => 'required|string',
+                'parent_id' => 'nullable|exists:category,id',
+            ]);
+
             $category = Category::findOrFail($id);
-            $category->update($request->all());
+
+            $category->update([
+                'name' => $request->name,
+                'description' => $request->description,
+                'parent_id' => $request->parent_id,
+            ]);
+
             $category->refresh();
             return response()->json(['category' => $category], 200);
         } catch (\Throwable $th) {
@@ -49,7 +71,7 @@ class CategoryServices
             $category = Category::findOrFail($id);
             $category->delete();
             return response()->json([
-                "category" => $category
+                "message" => "Category deleted successfully"
             ]);
         } catch (\Throwable $th) {
             return response()->json([

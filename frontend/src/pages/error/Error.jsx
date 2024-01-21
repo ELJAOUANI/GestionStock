@@ -31,7 +31,7 @@ export const Error404 = () => {
                                 </h4>
                                 <Link
                                     className="btn btn-primary"
-                                    to="/dashboard"
+                                    to="/"
                                     role="button"
                                 >
                                     Go Back to Home

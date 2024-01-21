@@ -1,6 +1,6 @@
 import { authAction } from "../Store/Slices/authSlice";
 import axiosClient from "../api/axios";
-import { login } from "./authService";
+import { login, resetPassword } from "./authService";
 
 const loginTh = (data) => {
     // eslint-disable-next-line no-unused-vars
@@ -39,4 +39,15 @@ export const logoutTh =()=>{
     }
 }
 }
+
+export const resetPasswordTH = (data) => {
+    return async (dispatch,_) => {
+        try {
+    const response = await dispatch(resetPassword(data));
+    return response;
+        } catch (e) {
+            console.error(e);
+        }
+    };
+};
 export default loginTh;

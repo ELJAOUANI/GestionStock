@@ -19,8 +19,6 @@ export const getdataThunk = () =>{
                         kpis : kpis
                        })
                       )
-        console.log("fournisseurs", fournisseurs);
-        console.log("kpis", kpis);
             return response
 
          }

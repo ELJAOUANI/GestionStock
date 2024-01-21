@@ -1,10 +1,19 @@
-import Cards from "../Cards";
+import { useDispatch, useSelector } from "react-redux";
 import NewEmployee from "./NewEmployee";
+import { useEffect } from "react";
+import { getEmployeTh } from "../../../Services/employe/employeThunk";
+import EmployeCards from "./EmployeCards";
 
 export default function Employee() {
+    const { employe } = useSelector((state)=>state.employe);
+    const dispatch = useDispatch()
+
+    useEffect(()=>{
+        dispatch(getEmployeTh())
+    },[])
     return (
         <>
-        <Cards/>
+            <EmployeCards />
             <div className="card">
                 <div className="border-bottom title-part-padding">
                     <h4 className="card-title mb-0">Liste Des Employes</h4>
@@ -37,54 +46,56 @@ export default function Employee() {
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>1</td>
-                                    <td>Genelia Deshmukh</td>
-                                    <td>genelia@gmail.com</td>
-                                    <td>+123 456 789</td>
-                                    <td>
-                                        <span className="badge bg-danger">
-                                            Designer
-                                        </span>
-                                    </td>
-                                    <td>23</td>
-                                    <td>12-10-2014</td>
-                                    <td>$1200</td>
-                                    <td className="text-end">
-                                        <div
-                                            className="btn-group"
-                                            role="group"
-                                            aria-label="Basic example"
-                                        >
-                                            <button
-                                                type="button"
-                                                className="btn btn-sm btn-danger"
-                                               
-                                                data-bs-target="#delete-modal"
-                                                data-bs-toggle="modal"
-                                            >
-                                                <i className="ti ti-trash-filled"></i>
-                                            </button>
-                                            <button
-                                                type="button"
-                                                className="btn btn-sm btn-warning"
-                                              
-                                                data-bs-target="#update-modal"
-                                                data-bs-toggle="modal"
-                                            >
-                                                <i className="ti ti-pencil"></i>
-                                            </button>
-                                            <button
-                                                type="button"
-                                                className="btn btn-sm btn-primary"
-                                               
-                                            >
-                                                <i className="ti ti-eye"></i>
-                                            </button>
-                                        </div>
-                                        
-                                    </td>
-                                </tr>
+                                {employe
+                                    ? employe.map((employe, key) => (
+                                          <tr key={key}>
+                                              <td>1</td>
+                                              <td>{employe.name}</td>
+                                              <td>{employe.email}</td>
+                                              <td>{employe.phone_number}</td>
+
+                                              <td>
+                                                  <span className="badge bg-danger">
+                                                      {employe.poste}
+                                                  </span>
+                                              </td>
+                                              <td>{employe.date_of_birth}</td>
+                                              <td>{employe.hire_date}</td>
+
+                                              <td>{employe.salaire}</td>
+                                              <td className="text-end">
+                                                  <div
+                                                      className="btn-group"
+                                                      role="group"
+                                                      aria-label="Basic example"
+                                                  >
+                                                      <button
+                                                          type="button"
+                                                          className="btn btn-sm btn-danger"
+                                                          data-bs-target="#delete-modal"
+                                                          data-bs-toggle="modal"
+                                                      >
+                                                          <i className="ti ti-trash-filled"></i>
+                                                      </button>
+                                                      <button
+                                                          type="button"
+                                                          className="btn btn-sm btn-warning"
+                                                          data-bs-target="#update-modal"
+                                                          data-bs-toggle="modal"
+                                                      >
+                                                          <i className="ti ti-pencil"></i>
+                                                      </button>
+                                                      <button
+                                                          type="button"
+                                                          className="btn btn-sm btn-primary"
+                                                      >
+                                                          <i className="ti ti-eye"></i>
+                                                      </button>
+                                                  </div>
+                                              </td>
+                                          </tr>
+                                      ))
+                                    : ""}
                             </tbody>
                         </table>
                     </div>

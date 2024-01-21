@@ -1,15 +1,36 @@
 <?php
+
 namespace App\Services;
 
 use App\Models\Employee;
+use Carbon\Carbon;
 
 class EmployeeService
 {
+
     public static function get()
     {
         try {
-            $employe = Employee::all();
-            return response()->json(['employe' => $employe], 200);
+            $currentMonth = Carbon::now()->startOfMonth();
+            $currentYear = Carbon::now()->year;
+            return response()->json([
+                'employe' => Employee::orderBy('created_at', 'DESC')->get(),
+                "kpis" => [
+                    'total_employe' => Employee::count(),
+                    'masse_salarial' => Employee::whereYear('created_at', $currentYear)
+                        ->whereMonth('created_at', $currentMonth->month)
+                        ->sum('salaire'),
+                    'employee_payee' => Employee::whereYear('created_at', $currentYear)
+                        ->whereMonth('created_at', $currentMonth->month)
+                        ->where('employment_status', 'payee') // Assuming '0' represents payee
+                        ->count(),
+                    'employee_no_payee' =>  Employee::whereYear('created_at', $currentYear)
+                        ->whereMonth('created_at', $currentMonth->month)
+                        ->where('employment_status', 'nopaye') // Assuming '1' represents non-payee
+                        ->count()
+
+                ]
+            ]);
         } catch (\Throwable $th) {
             return response()->json(['error', $th->getMessage()], 500);
         }
@@ -19,10 +40,10 @@ class EmployeeService
     {
 
         try {
-            $employee = new Employee($request->all());
-            $employee->save();
+            $employe = new Employee($request->all());
+            $employe->save();
             return response()->json([
-                "employee" => $employee
+                "employe" => $employe
             ]);
         } catch (\Throwable $th) {
             return response()->json([
@@ -37,7 +58,7 @@ class EmployeeService
             $employe = Employee::findOrFail($id);
             $employe->update($request->all());
             $employe->refresh();
-            return response()->json(['employee' => $employe], 200);
+            return response()->json(['employe' => $employe], 200);
         } catch (\Throwable $th) {
             return response()->json(['error' => $th->getMessage()]);
         }

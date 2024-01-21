@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Employee extends Model
 {
-    use HasFactory , SoftDeletes;
+    use HasFactory, SoftDeletes;
     protected $fillable = [
         'name',
         'email',
@@ -24,5 +24,15 @@ class Employee extends Model
         'city',
         'gender',
         'notes',
+        'user_id'
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'employee_id', 'id');
+    }
+    public function groups()
+    {
+        return $this->belongsToMany(Group::class, 'employees_group', 'employee_id', 'group_id');
+    }
 }

@@ -11,6 +11,25 @@ class Category extends Model
     protected $table = 'category';
     protected $fillable = [
         'name',
-        'description'
+        'description',
+        'parent_id'
+
     ];
+    public function subProducts()
+    {
+        return $this->hasMany(SubProduct::class);
+    }
+    public function parent()
+    {
+        return $this->belongsTo(Category::class, 'parent_id');
+    }
+
+    public function children()
+    {
+        return $this->hasMany(Category::class, 'parent_id');
+    }
+    public function products()
+    {
+        return $this->hasMany(Products::class);
+    }
 }

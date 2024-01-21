@@ -2,13 +2,19 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\ForgetPassword;
+use App\Models\Employee;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
+use Spatie\Permission\Models\Role;
+
 
 class AuthController extends Controller
 {
@@ -27,7 +33,7 @@ class AuthController extends Controller
             $authenticatedUser = Auth::user();
             Log::info('Authenticated User:', ['user_id' => $authenticatedUser->id, 'email' => $authenticatedUser->email]);
 
-            $user = User::all()->find($authenticatedUser->id);
+            $user = User::with('roles', 'employee')->find($authenticatedUser->id);
 
             $token = $user->createToken('API Token')->plainTextToken;
             return response()->json(
@@ -42,14 +48,6 @@ class AuthController extends Controller
             return response()->json(['error' => 'Invalid credentials'], 401);
         }
     }
-    public function checkAuthentication(Request $request)
-    {
-        // Your authentication logic here
-        // Check if the user is authenticated, get user data, etc.
-
-        // Example response:
-        return response()->json(['authenticated' => true, 'user' => $request->user()]);
-    }
     public function register(Request $request)
     {
         try {
@@ -58,33 +56,47 @@ class AuthController extends Controller
             $request->validate([
                 'email' => 'required|email|unique:users',
                 'password' => 'required|string|min:8',
-                // 'first_name' => 'required|string',
-                // 'last_name' => 'required|string',
-                // 'birthday' => 'required|date',
-                // 'sexe' => 'required|string',
-                // 'role' => 'required|string',
+                'date_of_birth' => 'required|date',
+                'gender' => 'required|string',
+                'role' => 'required|string',
+                'name' => 'required|string',
+            ]);
+
+            $employee = Employee::create([
+                'name' => Str::title($request->name),
+                'email' => Str::lower($request->email),
+                'date_of_birth' => Carbon::parse($request->date_of_birth)->format('Y-m-d'),
+                'gender' => $request->gender,
             ]);
 
             $user = User::create([
                 'email' => Str::lower($request->email),
                 'password' => bcrypt($request->password),
                 'name' => $request->name,
-                'last_name' => $request->last_name,
-                'birthday' => $request->birthday,
-                'sexe' => $request->first_name,
+                'employee_id' => $employee->id,
             ]);
 
-            // $user->assignRole(Role::where('name', $request->role)->first()->id);
-            // $employee->update(['user_id' => $user->id]);
-            $token = $user->createToken('API TOKEN')->accessToken;
+            $role = Role::where('name', $request->role)->first();
+
+            if ($role) {
+                $user->assignRole($role);
+            } else {
+                DB::rollBack();
+                return response()->json(['error' => 'Role not found.'], 404);
+            }
+
+            $employee->update(['user_id' => $user->id]);
+
+            $token = $user->createToken('API TOKEN')->plainTextToken;
             DB::commit();
+
             return response()->json([
                 'access_token' => $token,
                 'token_type' => 'Bearer',
             ], 201);
         } catch (\Throwable $th) {
             DB::rollBack();
-            return response()->json(['error' => 'error' . $th->getMessage()], 500);
+            return response()->json(['error' => 'Error: ' . $th->getMessage()], 500);
         }
     }
 
@@ -96,7 +108,7 @@ class AuthController extends Controller
             if ($user) {
                 $randomPassword = Str::random(12);
                 $user->update(['password' => bcrypt($randomPassword)]);
-                //Mail::to($user->email)->send(new ForgetPassword($user, $randomPassword));
+                Mail::to($user->email)->send(new ForgetPassword($user, $randomPassword));
                 return response()->json(['message' => 'Password updated successfully', 'new_password' => $randomPassword], 200);
             } else {
                 return response()->json(['error' => 'User not found'], 404);
@@ -119,6 +131,4 @@ class AuthController extends Controller
             'success' => true
         ]);
     }
-
 }
-

@@ -4,17 +4,16 @@ import axiosClient from "../api/axios";
 export const login = async (data) => {
     try {
         const response = await axiosClient.post("/auth/login", data);
-         return response; 
+        return response;
     } catch (e) {
         console.error(e);
     }
 };
 
-// Function to check authentication
-export const check_auth = async () => {
+export const resetPassword = async (data) => {
     try {
-        const res = await axiosClient.post("/auth/check-authentication");
-        return res.data;
+        const response = await axiosClient.post("/auth/forget-password", data);
+        return response;
     } catch (e) {
         console.error(e);
     }

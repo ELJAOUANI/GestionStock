@@ -22,6 +22,9 @@ const authSlice = createSlice({
             state.token = "",
              state.user = "";
         },
+        forgotPassword :()=>{
+            
+        }
     },
 });
 export const authAction = authSlice.actions;
