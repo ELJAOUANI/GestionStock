@@ -2,7 +2,8 @@
 
 import useAuth from "../hooks/useAuth";
 import Header from "./Header";
-import SideBaree from "./SideBaree";
+import SideBar from "./SideBar";
+//import SideBaree from "./SideBaree";
 import { Navigate, Outlet } from "react-router-dom";
 
 export default function Main() {
@@ -21,15 +22,12 @@ const auth = useAuth() ;
                 data-sidebar-position="fixed"
                 data-header-position="fixed"
             >
-                <SideBaree />
+                <SideBar />
                 <div className="body-wrapper">
                     <Header />
                     <div className="container-fluid">
-                        
-                            <Outlet />
-                    
+                        <Outlet />
                     </div>
-                    
                 </div>
             </div>
         </>

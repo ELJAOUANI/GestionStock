@@ -13,7 +13,7 @@ class Stock extends Model
     protected $table = 'stock';
    
 
-    protected $fillable = ['group_id','movement_type','product_id', 'sub_product_id', 'quantity'];
+    protected $fillable = ['group_id','movement_type','product_id', 'sub_product_id', 'quantity','sortie_id'];
 
 
     public function product()

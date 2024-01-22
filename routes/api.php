@@ -78,6 +78,7 @@ route::prefix('stock')->group(function () {
     route::get('/get', [StockController::class, 'get']);
     route::get('/getstocksorties', [StockController::class, 'getStockSorties']);
     Route::post('/store' , [StockController::class, 'addstock']);
+    Route::put('/updateStock/{id}' , [StockController::class, 'updateStock']);
     
 
 });

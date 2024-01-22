@@ -20,4 +20,8 @@ class StockController extends Controller
     {
         return StockService::addstock($request);
     }
+    public function updateStock($id,Request $request)
+    {
+        return StockService::updateStock($id,$request);
+    }
 }

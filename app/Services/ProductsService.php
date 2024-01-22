@@ -127,6 +127,7 @@ class ProductsService
     public static function stockout($request)
     {
         try {
+            $sortieId = uniqid('sortie_', true);
             $productsData = $request->input('products');
 
             // Ensure there are products in the request
@@ -169,6 +170,8 @@ class ProductsService
                     'quantity' => $quantity,
                     'movement_type' => 'OUT',
                     'group_id' => $groupId, // Use the common group_id
+                    'sortie_id' => $sortieId
+
                 ]);
 
                 // Update the available stock for the product
