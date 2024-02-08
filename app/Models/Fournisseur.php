@@ -31,7 +31,10 @@ class Fournisseur extends Model
     {
         return $this->hasMany(SubProduct::class);
     }
-    
+    public function stock()
+    {
+        return $this->hasMany(Stock::class);
+    }
 
 }
 

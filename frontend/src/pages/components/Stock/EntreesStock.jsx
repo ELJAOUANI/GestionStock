@@ -1,53 +1,47 @@
 import { useDispatch, useSelector } from "react-redux";
 
 import { useEffect, useState } from "react";
-import {Link} from "react-router-dom"
-import EmployeCards from "../employer/EmployeCards";
-import {
-    deleteProductTh,
-    getProductThunk,
-} from "../../../Services/Product/productThunk";
-import NewProduct from "./newProduct";
-import { getCategoryTh } from "../../../Services/category/categoryThunk";
-import { getdataThunk } from "../../../Services/fournisseur/fournisseurThunk";
-import DeleteConfirmation from "./DeleteConfirmation";
+import { Link } from "react-router-dom";
 
-export default function Product() {
-    const { products } = useSelector((state) => state.product);
-    const { kpis } = useSelector((state) => state.product);
- const [deletingItemId, setDeletingItemId] = useState(null);
+import { deleteProductTh } from "../../../Services/Product/productThunk";
+
+import { getAllEntriesTh } from "../../../Services/stock/stockThunk";
+import EmployeCards from "../employer/EmployeCards";
+import DeleteConfirmation from "../Product/DeleteConfirmation";
+import AddStock from "./addStock";
+
+export default function EntreesStock() {
+    const { entriesStock } = useSelector((state) => state.entriesStock);
+
+    const [deletingItemId, setDeletingItemId] = useState(null);
+
     const [loading, setLoading] = useState(true);
-    console.log(kpis);
 
     const dispatch = useDispatch();
 
     const fetchData = async () => {
         setLoading(true);
-        await dispatch(getProductThunk());
+        await dispatch(getAllEntriesTh());
 
         setLoading(false);
     };
     useEffect(() => {
-        dispatch(getCategoryTh());
-        dispatch(getdataThunk()); //fournisseur data
+        // dispatch(getCategoryTh());
+        // dispatch(getdataThunk()); //fournisseur data
         fetchData();
-    }, []);
-   const handleDelete = (id) => {
-       setDeletingItemId(id);
-       // Trigger the modal to open, you can use Bootstrap or other modal libraries
-       // Here's an example if you are using Bootstrap:
-       // $('#al-danger-alert').modal('show');
-   };
- 
- 
+    }, [dispatch]);
+    const handleDelete = (e, id) => {
+        e.preventDefault();
+        setDeletingItemId(id);
+    };
     return (
         <>
             <EmployeCards />
             <div className="card">
                 <div className="border-bottom title-part-padding">
-                    <h4 className="card-title mb-0">Liste Des Produits</h4>
+                    <h4 className="card-title mb-0">Stock Entree</h4>
                 </div>
-                <NewProduct />
+                <AddStock />
                 <div className="card-body">
                     <div className="table-responsive">
                         <table
@@ -66,11 +60,12 @@ export default function Product() {
                                 <tr>
                                     <th>No</th>
                                     <th>Name</th>
-                                    <th>Categorie</th>
-                                    <th>Prix</th>
-                                    <th>Fournisseur</th>
-
-                                    <th>Actions</th>
+                                    <th>Quantity</th>
+                                    <th>prix unitaire</th>
+                                    <th>Date D`achat</th>
+                                    <th>Creer Le</th>
+                                    <th>Bon D`achat</th>
+                                    <th>Total</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -81,17 +76,27 @@ export default function Product() {
                                         </td>
                                     </tr>
                                 ) : (
-                                    products.map((data, key) => (
+                                    entriesStock &&
+                                    entriesStock.map((data, key) => (
                                         <tr key={key}>
                                             <td>{key + 1}</td>
-                                            <td>{data?.name}</td>
-                                            <td>{data.category?.name}</td>
+                                            <td>{data.product?.name}</td>
+                                            <td>{data.quantity}</td>
                                             <td>{data.price}</td>
+                                            <td>{data.purchase_date}</td>
                                             <td>
-                                                {
-                                                    data.fournisseur
-                                                        ?.name_fournisseur
-                                                }
+                                                {new Date(
+                                                    data.created_at
+                                                ).toLocaleDateString()}
+                                            </td>
+                                            <td>
+                                                <img
+                                                    src={`/storage/bon_achats/${data.image_path}`}
+                                                    alt={data.id}
+                                                />
+                                            </td>
+                                            <td>
+                                                {data.price * data.quantity}
                                             </td>
                                             <td className="">
                                                 <div
@@ -100,8 +105,9 @@ export default function Product() {
                                                     aria-label="Basic example"
                                                 >
                                                     <button
-                                                        onClick={() =>
+                                                        onClick={(e) =>
                                                             handleDelete(
+                                                                e,
                                                                 data.id
                                                             )
                                                         }
@@ -136,8 +142,6 @@ export default function Product() {
                                     ))
                                 )}
                             </tbody>
-
-                            {/* Add this line to use the DeleteConfirmation component */}
                             <DeleteConfirmation
                                 confirmDelete={() =>
                                     dispatch(deleteProductTh(deletingItemId))

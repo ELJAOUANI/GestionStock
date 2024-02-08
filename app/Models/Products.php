@@ -11,7 +11,7 @@ class Products extends Model
     use HasFactory , SoftDeletes;
     protected $table = 'products';
     
-    protected $fillable = ['name', 'description', 'price', 'category_id', 'supplier_id', 'quantity' , 'created_by'];
+    protected $fillable = ['current_stock','name', 'description', 'price', 'category_id', 'supplier_id', 'quantity' , 'created_by'];
 
     public function category()
     {
@@ -69,6 +69,14 @@ class Products extends Model
 
     // ... other methods and attributes ...
 
+    public function refreshCurrentStock()
+    {
+        // Calculate current stock
+        $currentStock = $this->getCurrentStockAttribute();
+
+        // Save the calculated current stock to the database
+        $this->update(['current_stock' => $currentStock]);
+    }
     public function getCurrentStockAttribute()
     {
         $incomingStock = $this->stocks()->where('movement_type', 'IN')->sum('quantity');

@@ -4,7 +4,7 @@ import Employee from '../pages/components/employer/Employee'
 import { Error404 } from "../pages/error/Error";
 import Main from "../pages/Main";
 import GuestLayout from "../pages/components/GuestLayout/GuestLayout";
-import Dashboard from "../pages/components/Dashboard";
+
 import Fournisseur from "../pages/components/Fournisseur/Fournisseur";
 import ForgetPassword from "../pages/Auth/ForgetPassword";
 import Groups from "../pages/components/groups/Groups";
@@ -16,6 +16,8 @@ import Details from "../pages/components/Product/DetailProduct/Details";
 import Stock from "../pages/components/Stock/Stock";
 
 import GetStock from "../pages/components/StockSortie/GetStock";
+import EntreesStock from "../pages/components/Stock/EntreesStock";
+import Dashboard from "../pages/components/Dashboard/Dashboard";
 
 const router = createBrowserRouter([
     {
@@ -61,6 +63,10 @@ const router = createBrowserRouter([
             {
                 path: "/stockout",
                 element: <GetStock />,
+            },
+            {
+                path: "/entreestock",
+                element: <EntreesStock />,
             },
         ],
     },

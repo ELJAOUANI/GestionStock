@@ -6,9 +6,16 @@ const stockSortieSlice = createSlice({
         stockSortie: [],
     },
     reducers: {
+   
+
         setData: (state, action) => {
             state.stockSortie = action.payload.stockSorties;
             console.log("hello frome store stockSortie", state.stockSortie);
+        },
+
+        updateData: (state, action) => {
+            const updatedData = action.payload;
+            state.stockSortie = [...state.stockSortie, updatedData];
         },
     },
 });

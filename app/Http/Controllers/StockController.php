@@ -16,12 +16,21 @@ class StockController extends Controller
     {
         return StockService::getStockSorties();
     }
+    public function getStockEntries()
+    {
+        return StockService::getStockEntries();
+    }
     public function addstock(Request $request)
     {
         return StockService::addstock($request);
     }
-    public function updateStock($id,Request $request)
+    public function getStockSortieById($id)
     {
-        return StockService::updateStock($id,$request);
+        return StockService::getStockSortieById($id);
     }
+    public function updateStockOut(Request $request, $sortieId)
+    {
+        return StockService::updateStockOut($request, $sortieId);
+    }
+   
 }

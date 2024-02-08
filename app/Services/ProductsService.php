@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\Products;
 use App\Models\Stock;
+use Illuminate\Support\Facades\DB;
 
 class ProductsService
 {
@@ -126,6 +127,8 @@ class ProductsService
     }
     public static function stockout($request)
     {
+        DB::beginTransaction(); // Begin database transaction
+
         try {
             $sortieId = uniqid('sortie_', true);
             $productsData = $request->input('products');
@@ -160,8 +163,7 @@ class ProductsService
 
                 // Check if there is enough stock available
                 if ($availableStock < $quantity) {
-                    throw new
-                    \Exception("Insufficient stock available for product: {$product->name} (ID: {$product->id}).");;
+                    throw new \Exception("Insufficient stock available for product: {$product->name} (ID: {$product->id}).");
                 }
 
                 // Create outgoing stock movement
@@ -170,23 +172,26 @@ class ProductsService
                     'quantity' => $quantity,
                     'movement_type' => 'OUT',
                     'group_id' => $groupId, // Use the common group_id
-                    'sortie_id' => $sortieId
-
+                    'sortie_id' => $sortieId,
                 ]);
 
                 // Update the available stock for the product
-                $product->refresh();
+                $product->refreshCurrentStock();
             }
+
+            DB::commit(); // Commit database changes
 
             return response()->json([
                 'message' => 'Products affected successfully.',
             ], 200);
         } catch (\Throwable $th) {
+            DB::rollBack(); // Rollback changes if an error occurs
             return response()->json([
-                'error' => $th->getMessage()
+                'error' => $th->getMessage(),
             ], 409);
         }
     }
+
 
     public static function getProductsByCategory($request)
     {
@@ -203,5 +208,13 @@ class ProductsService
             return response()->json(['error' => $th->getMessage()], 500);
         }
     }
+
+
+ 
+
+
+
+
+
 
 }

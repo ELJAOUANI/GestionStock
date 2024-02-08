@@ -171,6 +171,20 @@ export default function SideBar() {
                                           </span>
                                       </Link>
                                   </li>
+                                  <li className="sidebar-item">
+                                      <Link
+                                          to="/entreestock"
+                                          className="sidebar-link"
+                                          aria-expanded="false"
+                                      >
+                                          <span>
+                                              <i className="ti ti-package"></i>
+                                          </span>
+                                          <span className="hide-menu">
+                                              Stock Entre
+                                          </span>
+                                      </Link>
+                                  </li>
                               </ul>
                           </li>
                           <li className="sidebar-item">

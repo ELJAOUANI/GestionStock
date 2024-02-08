@@ -11,37 +11,78 @@ import {
 import { getStockTh } from "../../../Services/stock/stockThunk";
 import EmployeCards from "../employer/EmployeCards";
 
-import SortieStock from "./SortieStock";
+import SortieStock from "./SortieStockModal";
+import DeleteConfirmation from "../Product/DeleteConfirmation";
 
 export default function Stock() {
-    const { stock } = useSelector((state) => state.stock);
-    console.log(stock)
-  
+  const { stock } = useSelector((state) => state.stock);
+  const [deletingItemId, setDeletingItemId] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [alertMessage, setAlertMessage] = useState("");
 
-    const [loading, setLoading] = useState(true);
+  const dispatch = useDispatch();
 
+  const fetchData = async () => {
+      try {
+          setLoading(true);
+          const response = await dispatch(getStockTh());
+          if (response.status === 200) {
+              const { stock } = response.data;
+              // Update stock and alert based on the fetched data
+              setAlertBasedOnStock(stock);
+          }
+      } catch (error) {
+          console.error("Fetching data failed:", error);
+      } finally {
+          setLoading(false);
+      }
+  };
 
-    const dispatch = useDispatch();
+  const setAlertBasedOnStock = (newStock) => {
+      const outOfStockProducts = newStock.filter(
+          (data) => data.available_stock === 0
+      );
+      if (outOfStockProducts.length > 0) {
+          const productNames = outOfStockProducts
+              .map((product) => product.name)
+              .join(", ");
+          setAlertMessage(
+              `Les produits suivants sont en rupture de stock: ${productNames}`
+          );
+      } else {
+          setAlertMessage("");
+      }
+  };
 
-    const fetchData = async () => {
-        setLoading(true);
-        await dispatch(getStockTh());
+  useEffect(() => {
+      fetchData();
+  }, [dispatch]); // Fetch data on component mount or when needed, not on stock change
 
-        setLoading(false);
-    };
-    useEffect(() => {
-    
-        // dispatch(getCategoryTh());
-        // dispatch(getdataThunk()); //fournisseur data
-        fetchData();
-    }, [dispatch]);
-    const handleDelete = (e, id) => {
-        e.preventDefault();
-        dispatch(deleteProductTh(id));
-        
-    };
+  useEffect(() => {
+      // Update alert based on the stock
+      setAlertBasedOnStock(stock);
+  }, [stock]);
+
+  const handleDelete = (e, id) => {
+      e.preventDefault();
+      setDeletingItemId(id);
+  };
     return (
         <>
+            {alertMessage && (
+                <div
+                    className="alert alert-warning alert-dismissible fade show"
+                    role="alert"
+                >
+                    {alertMessage}
+                    <button
+                        type="button"
+                        className="btn-close"
+                        data-bs-dismiss="alert"
+                        aria-label="Close"
+                    ></button>
+                </div>
+            )}
             <EmployeCards />
             <div className="card">
                 <div className="border-bottom title-part-padding">
@@ -84,7 +125,6 @@ export default function Stock() {
                                             <td>{data.name}</td>
 
                                             <td>{data.available_stock}</td>
-                                         
 
                                             <td className="">
                                                 <div
@@ -101,8 +141,8 @@ export default function Stock() {
                                                         }
                                                         type="button"
                                                         className="btn btn-sm btn-danger"
-                                                        data-bs-target="#delete-modal"
                                                         data-bs-toggle="modal"
+                                                        data-bs-target="#al-danger-alert"
                                                     >
                                                         <i className="ti ti-trash-filled"></i>
                                                     </button>
@@ -130,6 +170,11 @@ export default function Stock() {
                                     ))
                                 )}
                             </tbody>
+                            <DeleteConfirmation
+                                confirmDelete={() =>
+                                    dispatch(deleteProductTh(deletingItemId))
+                                }
+                            />
                         </table>
                     </div>
                 </div>

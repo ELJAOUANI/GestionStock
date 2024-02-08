@@ -31,6 +31,7 @@ class ProductController extends Controller
     {
         return ProductsService::update($id, $request);
     }
+
     public function delete($id)
     {
         return ProductsService::delete($id);

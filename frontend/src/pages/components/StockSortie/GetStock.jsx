@@ -1,41 +1,39 @@
 import { useDispatch, useSelector } from "react-redux";
-
 import { useEffect, useState } from "react";
- 
-import { Link} from 'react-router-dom'
-
-
+import { Link } from "react-router-dom";
 import { getAllStockSortieTh } from "../../../Services/stock/stockThunk";
-
+import EditeStockSortie from "../Stock/EditeStockSortie";
+import { stockActions } from "../../../Store/Slices/Stock/StockSlice";
 
 export default function GetStock() {
- const [loading, setLoading] = useState(true);
-
-      const dispatch = useDispatch();
-      const { stockSortie } = useSelector((state) => state.stockSortie);
-      console.log('from get stock ',stockSortie);
-
- 
+    const [loading, setLoading] = useState(true);
+    const dispatch = useDispatch();
+    const { stockSortie } = useSelector((state) => state.stockSortie);
 
     const fetchData = async () => {
-       
-        await dispatch(getAllStockSortieTh());
-
-          setLoading(false);
+        try {
+            await dispatch(getAllStockSortieTh());
+        } finally {
+            setLoading(false);
+        }
     };
+
     useEffect(() => {
-        // dispatch(getCategoryTh());
-        // dispatch(getdataThunk()); //fournisseur data
         fetchData();
     }, [dispatch]);
-    const handleDelete = (e) => {
-   e.preventDefault();
-        
+
+    const handleEdit = (id) => {
+        dispatch(stockActions.setSortieId(id));
     };
+
+    const handleDelete = (e) => {
+        e.preventDefault();
+        // Add your delete logic here
+        // Consider showing a confirmation dialog before deleting
+    };
+
     return (
         <>
-        
-
             <div className="card">
                 <div className="border-bottom title-part-padding">
                     <h4 className="card-title mb-0">Liste De Stock Affecter</h4>
@@ -57,7 +55,7 @@ export default function GetStock() {
                                     <th>Actions</th>
                                 </tr>
                             </thead>
-                        
+
                             <tbody>
                                 {loading ? (
                                     <tr>
@@ -66,7 +64,7 @@ export default function GetStock() {
                                         </td>
                                     </tr>
                                 ) : (
-                                    stockSortie.map(
+                                    stockSortie?.map(
                                         (stockSortieGroup, index) => (
                                             <tr key={index}>
                                                 <td>{stockSortieGroup.date}</td>
@@ -85,7 +83,7 @@ export default function GetStock() {
                                                                     {
                                                                         sortie
                                                                             .product
-                                                                            .name
+                                                                            ?.name
                                                                     }{" "}
                                                                     - Sortie
                                                                     Quantity:{" "}
@@ -119,7 +117,6 @@ export default function GetStock() {
                                                         )}
                                                     </ul>
                                                 </td>
-                                           
                                                 <td>
                                                     <div
                                                         className="btn-group"
@@ -138,9 +135,14 @@ export default function GetStock() {
                                                             <i className="ti ti-trash-filled"></i>
                                                         </button>
                                                         <button
+                                                            onClick={() =>
+                                                                handleEdit(
+                                                                    stockSortieGroup.sortie_id
+                                                                )
+                                                            }
                                                             type="button"
                                                             className="btn btn-sm btn-warning"
-                                                            data-bs-target="#update-modal"
+                                                            data-bs-target="#editStock"
                                                             data-bs-toggle="modal"
                                                         >
                                                             <i className="ti ti-pencil"></i>
@@ -163,6 +165,7 @@ export default function GetStock() {
                         </table>
                     </div>
                 </div>
+                <EditeStockSortie />
             </div>
         </>
     );

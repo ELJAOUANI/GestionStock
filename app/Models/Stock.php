@@ -13,7 +13,7 @@ class Stock extends Model
     protected $table = 'stock';
    
 
-    protected $fillable = ['group_id','movement_type','product_id', 'sub_product_id', 'quantity','sortie_id'];
+    protected $fillable = ['fournisseur_id','group_id','movement_type','product_id', 'price', 'sub_product_id', 'quantity','sortie_id', 'image_path' , 'purchase_date'];
 
 
     public function product()
@@ -30,5 +30,8 @@ class Stock extends Model
        return $this->belongsTo(Group::class) ;
     }
 
- 
+ public function fournisseur(){
+    return $this->belongsTo(Fournisseur::class ) ; 
+ }
+
 }

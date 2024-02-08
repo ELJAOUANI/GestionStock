@@ -10,6 +10,8 @@ import employeeGroupsReducer from "../Slices/EmployeesGroup/EmployeesGrpoups";
 import productReducer from "../Slices/Product/productSlice";
 import stockReducer from "../Slices/Stock/StockSlice"
 import stockSortieReducer from "../Slices/Stock/StockSortieSlice"
+import entriesStockReducer from "../Slices/Stock/addStockSlice";
+import dashboardReducer from "../Slices/Dashboard/dashboardSlice"
 
 const rootReducer = combineReducers({
     auth: authReducer,
@@ -21,6 +23,8 @@ const rootReducer = combineReducers({
     product: productReducer,
     stock: stockReducer,
     stockSortie: stockSortieReducer,
+    entriesStock: entriesStockReducer,
+    dashboard: dashboardReducer
 });
 
 export default rootReducer;

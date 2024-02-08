@@ -5,12 +5,13 @@ const stockSlice = createSlice({
     initialState: {
         stock: [],
         kpis: null,
-        
+        loading: false,
+        itemId: null,
+        stockById :[]
     },
     reducers: {
         setStock: (state, action) => {
             state.stock = action.payload.stock;
-            
         },
         setKpis: (state, action) => {
             state.kpis = action.payload.kpis;
@@ -31,6 +32,19 @@ const stockSlice = createSlice({
                       }
                     : product
             );
+        },
+        setLoading: (state, action) => {
+            state.loading = action.payload;
+        },
+        setError: (state, action) => {
+            state.error = action.payload;
+            state.loading = false;
+        },
+        setSortieId: (state, action) => {
+            state.itemId = action.payload;
+        },
+        setStockById: (state, action) => {
+            state.stockById = action.payload.stockksortiie;
         },
     },
 });

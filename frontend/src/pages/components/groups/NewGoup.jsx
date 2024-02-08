@@ -2,38 +2,35 @@ import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { getEmployeTh } from "../../../Services/employe/employeThunk";
 import { storeGroupeTh } from "../../../Services/groups/groupThunk";
+import "react-toastify/dist/ReactToastify.css";
+import { toast } from "react-toastify";
 export default function NewGroup() {
-
-
     const [isLoading, setIsLoading] = useState(false);
-     const [groupName, setGroupName] = useState("");
-     const [validationError, setValidationError] = useState("");
+    const [groupName, setGroupName] = useState("");
+    const [validationError, setValidationError] = useState("");
     const dispatch = useDispatch();
+    const notify = (message) => toast.success(message);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-         if (!groupName) {
-             setValidationError("Le nom du groupe est requis.");
-             return;
-         }
-        setIsLoading(true);
-        try {
-            // Add your form validation logic if needed
-            if (!groupName.trim()) {
-                // Handle the case where the group name is empty
-                console.log("Group name is required");
-                return;
-            }
 
+        if (!groupName) {
+            setValidationError("Le nom du groupe est requis.");
+            return;
+        }
+
+        setIsLoading(true);
+
+        try {
             // Dispatch the Redux action with the form data
-            await dispatch(storeGroupeTh({name: groupName }));
+            await dispatch(storeGroupeTh({ name: groupName }));
+
+            // Show success notification after successful insertion
+            notify("Le groupe a bien été ajouté.");
 
             // Optionally, you can reset the form or perform other actions after submission
-       
-                setGroupName("");
-                setValidationError("");
-         
-                
+            setGroupName("");
+            setValidationError("");
         } catch (error) {
             // Handle errors, e.g., display an error message
             console.error("Error submitting form:", error);
@@ -106,10 +103,11 @@ export default function NewGroup() {
                             <div className="modal-footer">
                                 <button
                                     onClick={handleSubmit}
-                                    type="button"
+                                    type="submit"
                                     className="btn btn-info waves-effect"
-                                   // data-bs-dismiss="modal"
+                                
                                     disabled={isLoading}
+                                    data-bs-dismiss="modal"
                                 >
                                     {isLoading ? "Loading..." : "Submit"}
                                 </button>

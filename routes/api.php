@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryContoller;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\EmployeeGroupController;
 use App\Http\Controllers\FournisseurController;
@@ -34,6 +35,10 @@ Route::prefix('auth')->group(function(){
   
 
 });
+
+Route::prefix('dashboard')->group(function(){
+    Route::get('/get', [DashboardController::class, 'dashboard']);
+});
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
 });
@@ -54,6 +59,7 @@ Route::delete('/delete/{id}', [CategoryContoller::class, 'delete']);
 });
 route::prefix('product')->group(function () {
     route::put('/update/{id}', [ProductController::class, 'update']);
+    route::put('/editstockout/{sortieId}', [ProductController::class, 'updateStockOut']);
     route::get('/get', [ProductController::class, 'get']);
     route::get('/getcate', [ProductController::class, 'getProductsByCategory']);
     Route::post('/store', [ProductController::class, 'store']);
@@ -75,10 +81,12 @@ route::prefix('employe')->group(function () {
 });
 route::prefix('stock')->group(function () {
     route::post('/sortie', [StockController::class, 'getStockForProducts']);
-    route::get('/get', [StockController::class, 'get']);
+    Route::get('/get', [StockController::class, 'get']);
+    route::get('/entries', [StockController::class, 'getStockEntries']);
     route::get('/getstocksorties', [StockController::class, 'getStockSorties']);
     Route::post('/store' , [StockController::class, 'addstock']);
-    Route::put('/updateStock/{id}' , [StockController::class, 'updateStock']);
+    Route::put('/updateStock/{id}' , [StockController::class, 'updateStockOut']);
+    Route::get('/{id}', [StockController::class, 'getStockSortieById']);
     
 
 });
